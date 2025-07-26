@@ -3,60 +3,59 @@
 {% block title %}Production ID {{ prod_id }}{% endblock %}
 
 {% block content %}
-    <h2>Production ID: {{ prod_id }}</h2>
-    <p>Current Server Time: {{ current_time }}</p>
+<h2>Production ID: {{ prod_id }}</h2>
+<p>Current Server Time: {{ current_time }}</p>
 <div class="data-table-responsive-wrapper">
 
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>Metric</th>
-                <th>Day</th>
-                <th>Month</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Plan</td>
-                <td>{{ data.plan_day }}</td>
-                <td>{{ data.plan_month }}</td>
-            </tr>
-            <tr>
-                <td>Actual</td>
-                <td>{{ data.actual_day }}</td>
-                <td>{{ data.actual_month }}</td>
-            </tr>
-            <tr>
-                <td>Gap</td>
-                <td class="{% if data.gap_day < 0 %}gap-negative{% else %}gap-positive{% endif %}">{{ data.gap_day }}</td>
-                <td class="{% if data.gap_month < 0 %}gap-negative{% else %}gap-positive{% endif %}">{{ data.gap_month }}</td>
-            </tr>
-        </tbody>
-    </table>
+	<table class="data-table">
+		<thead>
+			<tr>
+				<th>Metric</th>
+				<th>Day</th>
+				<th>Month</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Plan</td>
+				<td>{{ data.plan_day }}</td>
+				<td>{{ data.plan_month }}</td>
+			</tr>
+			<tr>
+				<td>Actual</td>
+				<td>{{ data.actual_day }}</td>
+				<td>{{ data.actual_month }}</td>
+			</tr>
+			<tr>
+				<td>Gap</td>
+				<td class="{% if data.gap_day < 0 %}gap-negative{% else %}gap-positive{% endif %}">{{ data.gap_day }}</td>
+				<td class="{% if data.gap_month < 0 %}gap-negative{% else %}gap-positive{% endif %}">{{ data.gap_month }}</td>
+			</tr>
+		</tbody>
+	</table>
 </div>
 
-    <h3>Shift Status: <span class="{% if data.is_shift_active %}status-active{% else %}status-inactive{% endif %}">{{ "Active" if data.is_shift_active else "Inactive" }}</span></h3>
+<h3>Shift Status: <span class="{% if data.is_shift_active %}status-active{% else %}status-inactive{% endif %}">{{ "Active" if data.is_shift_active else "Inactive" }}</span></h3>
 
-    {% if data.is_shift_active %}
-        <p>Shift Started: {{ datetime.fromisoformat(data.shift_start_time).strftime('%Y-%m-%d %H:%M:%S') }}</p>
-        {% if data.last_actual_update_time %}
-            <p>Last Actual Update: {{ datetime.fromisoformat(data.last_actual_update_time).strftime('%Y-%m-%d %H:%M:%S') }}</p>
-        {% endif %}
+{% if data.is_shift_active %}
+<p>Shift Started: {{ datetime.fromisoformat(data.shift_start_time).strftime('%Y-%m-%d %H:%M:%S') }}</p>
+{% if data.last_actual_update_time %}
+<p>Last Actual Update: {{ datetime.fromisoformat(data.last_actual_update_time).strftime('%Y-%m-%d %H:%M:%S') }}</p>
+{% endif %}
 
-        <form action="{{ url_for('shift_action', prod_id=prod_id) }}" method="post">
-            <label for="new_actual_day">Update Actual Production for Today:</label>
-            <input type="number" id="new_actual_day" name="new_actual_day" value="{{ data.actual_day }}" required>
-            <button type="submit" name="action" value="update_actual">Update Actual</button>
-        </form>
-        <br>
-        <form action="{{ url_for('shift_action', prod_id=prod_id) }}" method="post">
-            <button type="submit" name="action" value="end_shift" class="danger">End Shift</button>
-        </form>
-    {% else %}
-        <form action="{{ url_for('shift_action', prod_id=prod_id) }}" method="post">
-            <label for="new_day_plan">New Day Plan:</label>
-            <input type="number" id="new_day_plan" name="new_day_plan" placeholder="Enter planned units for today" required>
-            <button type="submit" name="action" value="start_shift">Start Shift</button>
-        </form>
-    {% endif %}
+<form action="{{ url_for('shift_action', prod_id=prod_id) }}" method="POST" style="display:inline;">
+	<input type="hidden" name="action" value="update_actual">
+	<button type="submit">Update Actual (+1)</button> {# Updated button text #}
+</form>
+<br>
+<form action="{{ url_for('shift_action', prod_id=prod_id) }}" method="post">
+	<button type="submit" name="action" value="end_shift" class="danger">End Shift</button>
+</form>
+{% else %}
+<form action="{{ url_for('shift_action', prod_id=prod_id) }}" method="post">
+	<label for="new_day_plan">New Day Plan:</label>
+	<input type="number" id="new_day_plan" name="new_day_plan" placeholder="Enter planned units for today" required>
+	<button type="submit" name="action" value="start_shift">Start Shift</button>
+</form>
+{% endif %}
 {% endblock %}

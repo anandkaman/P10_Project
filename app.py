@@ -262,19 +262,14 @@ def shift_action(prod_id):
         if not data["is_shift_active"]:
             flash("Shift is not active. Please start shift first.", 'error')
             return redirect(url_for('production_page', prod_id=prod_id))
-        new_actual_day_str = request.form.get('new_actual_day')
-        if new_actual_day_str is None:
-            flash("Actual value not provided for update.", 'error')
-            return redirect(url_for('production_page', prod_id=prod_id))
-        try:
-            new_actual_day = int(new_actual_day_str)
-        except ValueError:
-            flash("Actual must be a number.", 'error')
-            return redirect(url_for('production_page', prod_id=prod_id))
-        data["actual_day"] = new_actual_day
+
+        # --- MODIFIED LOGIC: Increment actual_day by 1 ---
+        data["actual_day"] += 1 
+        # --- END MODIFIED LOGIC ---
+
         data["gap_day"] = data["plan_day"] - data["actual_day"]
         data["last_actual_update_time"] = current_dt.isoformat()
-        flash(f"Actual for ProdID {prod_id} updated.", 'success')
+        flash(f"Actual for ProdID {prod_id} incremented to {data['actual_day']}.", 'success') # Update flash message
         print("update_actual over")
     elif action == 'end_shift':
         if not data["is_shift_active"]:
