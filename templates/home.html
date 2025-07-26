@@ -10,11 +10,32 @@
     <p>Click on a Production ID link in the header to manage its shift and update its production figures.</p>
 
     <h3>Log Management:</h3>
-    <p>You can download a CSV file containing records of all completed shifts, or clear the log data.</p>
+    <p>You can download a CSV file containing records of all completed shifts, clear the log data, or update the server time.</p>
     <div class="button-group">
         <a href="{{ url_for('download_log') }}" class="button">Download Production Log (CSV)</a>
         <a href="{{ url_for('clear_logs_confirm') }}" class="button danger">Clear All Logs</a>
         <a href="{{ url_for('publish_all_data_simulated') }}" class="button">Force Update Display</a>
+        <button onclick="confirmUpdateTime()" class="button">Update Server Time</button>
     </div>
     <p><em>Current Server Time: {{ current_time }}</em></p>
+
+    <script>
+        function confirmUpdateTime() {
+            if (confirm("Are you sure you want to update the server time to your device's current time?")) {
+                const now = new Date();
+                // Format as YYYY-MM-DD HH:MM:SS
+                const clientTime = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '{{ url_for("update_server_time") }}';
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'client_time';
+                input.value = clientTime;
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
 {% endblock %}
