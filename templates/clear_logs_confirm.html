@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Confirm Clear Logs{% endblock %}
+
+{% block content %}
+    <h2>Clear All Production Logs</h2>
+    <p>Current Server Time: {{ current_time }}</p>
+
+    <p><strong>WARNING:</strong> This action will permanently delete all historical production log data.</p>
+    <p>Are you sure you want to clear ALL logs?</p>
+
+    <form action="{{ url_for('clear_logs_action') }}" method="post">
+        <div class="button-group">
+            <button type="submit" name="confirm" value="yes" class="danger">Yes, Clear All Logs</button>
+            <button type="submit" name="confirm" value="no">No, Go Back</button>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,42 @@
+{
+    "1": {
+        "prod_id": 1,
+        "plan_day": 8,
+        "actual_day": 0,
+        "gap_day": 8,
+        "plan_month": 46,
+        "actual_month": 17,
+        "gap_month": 29,
+        "is_shift_active": true,
+        "shift_start_time": "2025-07-26T19:32:54.713377",
+        "last_actual_update_time": "2025-07-26T19:32:54.713377",
+        "current_month_tracker": "2025-07"
+    },
+    "2": {
+        "prod_id": 2,
+        "plan_day": 6,
+        "actual_day": 1,
+        "gap_day": 5,
+        "plan_month": 0,
+        "actual_month": 0,
+        "gap_month": 0,
+        "is_shift_active": true,
+        "shift_start_time": "2025-07-26T16:40:45.694355",
+        "last_actual_update_time": "2025-07-26T19:43:41.528542",
+        "current_month_tracker": "2025-07"
+    },
+    "3": {
+        "prod_id": 3,
+        "plan_day": 6,
+        "actual_day": 0,
+        "gap_day": 6,
+        "plan_month": 5,
+        "actual_month": 2,
+        "gap_month": 3,
+        "is_shift_active": true,
+        "shift_start_time": "2025-07-26T17:53:51.217972",
+        "last_actual_update_time": "2025-07-26T17:53:51.217972",
+        "current_month_tracker": "2025-07"
+    },
+    "last_attempted_server_time_update": "10"
+}
