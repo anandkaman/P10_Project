@@ -5,6 +5,7 @@
 {% block content %}
     <h2>Production ID: {{ prod_id }}</h2>
     <p>Current Server Time: {{ current_time }}</p>
+<div class="data-table-responsive-wrapper">
 
     <table class="data-table">
         <thead>
@@ -32,6 +33,7 @@
             </tr>
         </tbody>
     </table>
+</div>
 
     <h3>Shift Status: <span class="{% if data.is_shift_active %}status-active{% else %}status-inactive{% endif %}">{{ "Active" if data.is_shift_active else "Inactive" }}</span></h3>
 

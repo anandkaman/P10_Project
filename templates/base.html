@@ -29,16 +29,21 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap; /* Allow items to wrap on smaller screens */
         }
         header h1 {
             margin: 0;
             font-size: 1.8em;
+        }
+        header .nav-links {
+            display: flex; /* Keep links in a row by default */
         }
         header .nav-links a {
             color: white;
             text-decoration: none;
             margin-left: 20px;
             font-weight: bold;
+            white-space: nowrap; /* Prevent links from breaking */
         }
         .content {
             padding: 20px;
@@ -102,6 +107,7 @@
             text-decoration: none;
             display: inline-block;
             margin-right: 10px;
+            margin-bottom: 10px; /* Added for mobile stacking */
         }
         .button-group button:hover, .button-group a:hover {
             background-color: #0056b3;
@@ -118,6 +124,7 @@
             border-radius: 4px;
             width: 150px;
             margin-right: 10px;
+            margin-bottom: 10px; /* Added for mobile stacking */
         }
         .status-active {
             color: green;
@@ -132,6 +139,78 @@
         }
         .gap-negative {
             color: red;
+        }
+
+        /* --- Responsive Design with Media Queries --- */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%; /* Make container slightly wider on smaller screens */
+                padding: 15px;
+            }
+
+            header {
+                flex-direction: column; /* Stack logo and nav links */
+                text-align: center;
+                padding: 15px 10px;
+            }
+            header h1 {
+                margin-bottom: 10px; /* Space between title and nav */
+                font-size: 1.5em; /* Smaller title font */
+            }
+            header .nav-links {
+                flex-direction: column; /* Stack nav links vertically */
+                width: 100%; /* Take full width */
+            }
+            header .nav-links a {
+                margin: 5px 0; /* Adjust margins for stacked links */
+                padding: 8px 0; /* Add some padding for touch targets */
+                display: block; /* Make links take full width */
+                border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Separator */
+            }
+            header .nav-links a:last-child {
+                border-bottom: none; /* No separator for the last link */
+            }
+
+            .content {
+                padding: 15px 5px;
+            }
+
+            /* Make tables horizontally scrollable */
+            .data-table-responsive-wrapper { /* This class will need to wrap your <table> in production_page.html */
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
+            }
+            .data-table {
+                min-width: 650px; /* Ensure table is wider than small screens to force scroll */
+                /* Adjust this min-width based on how many columns you have and their content */
+            }
+
+            /* Form inputs and buttons */
+            input[type="number"], input[type="text"] {
+                width: calc(100% - 20px); /* Take full width minus padding/border */
+                margin-right: 0;
+                margin-bottom: 10px;
+                box-sizing: border-box; /* Include padding/border in width calculation */
+            }
+            .button-group {
+                display: flex;
+                flex-direction: column; /* Stack buttons vertically */
+            }
+            .button-group button, .button-group a {
+                width: 100%; /* Make buttons full width */
+                margin-right: 0;
+                margin-bottom: 10px; /* Space between stacked buttons */
+                box-sizing: border-box; /* Include padding/border in width calculation */
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.3em; /* Even smaller title for very small screens */
+            }
+            header .nav-links a {
+                font-size: 0.85em; /* Smaller nav links for very small screens */
+            }
         }
     </style>
 </head>
