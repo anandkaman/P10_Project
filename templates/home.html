@@ -3,37 +3,18 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <h2>Welcome to the P10 Production Dashboard</h2>
-    <p>This dashboard allows you to manage and monitor production data for up to 3 different production lines. Each line has its own dedicated page for shift management and data entry.</p>
+    <h2>Welcome to the P10 Production Dashboard</h2>
+    <p>This dashboard allows you to manage and monitor production data for up to 3 different production lines. Each line has its own dedicated page for shift management and data entry.</p>
 
-    <h3>Current Status Overview:</h3>
-    <p>Click on a Production ID link in the header to manage its shift and update its production figures.</p>
+    <h3>Current Status Overview:</h3>
+    <p>Click on a Production ID link in the header to manage its shift and update its production figures.</p>
 
-    <h3>Log Management:</h3>
-    <p>You can download a CSV file containing records of all completed shifts, or clear the log data.</p>
-    <div class="button-group">
-        <a href="{{ url_for('download_log') }}" class="button">Download Production Log (CSV)</a>
-        <a href="{{ url_for('clear_logs_confirm') }}" class="button danger">Clear All Logs</a>
-        <a href="{{ url_for('publish_all_data_simulated') }}" class="button">Force Update Display</a>
-        <button class="button" onclick="syncTimeWithServer()">Sync Time with Client</button>
-    </div>
-
-    <p><em>Current Server Time: {{ current_time }}</em></p>
-
-    <script>
-        function syncTimeWithServer() {
-            const clientTime = new Date().toISOString(); // ISO format (UTC)
-            fetch("{{ url_for('set_time') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ client_time: clientTime })
-            })
-            .then(res => res.json())
-            .then(data => alert(data.message))
-            .catch(err => alert("Failed to sync time: " + err));
-        }
-    </script>
+    <h3>Log Management:</h3>
+    <p>You can download a CSV file containing records of all completed shifts, or clear the log data.</p>
+    <div class="button-group">
+        <a href="{{ url_for('download_log') }}" class="button">Download Production Log (CSV)</a>
+        <a href="{{ url_for('clear_logs_confirm') }}" class="button danger">Clear All Logs</a>
+        <a href="{{ url_for('publish_all_data_simulated') }}" class="button">Force Update Display</a>
+    </div>
+    <p><em>Current Server Time: {{ current_time }}</em></p>
 {% endblock %}
-
