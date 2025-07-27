@@ -175,31 +175,8 @@ def publish_all_data_to_esp():
 
 @app.before_request
 def before_request_load_state_and_time_check():
-    """Loads state and performs time-based penalties before any request to a production page."""
+    """Loads state before any request."""
     load_state()
-    if request.path.startswith('/production/'):
-        try:
-            prod_id = int(request.path.split('/')[-1])
-            if prod_id in production_data_sets:
-                data = production_data_sets[prod_id]
-                current_dt = datetime.now()
-                if data["is_shift_active"] and data["last_actual_update_time"]:
-                    last_update_dt = datetime.fromisoformat(data["last_actual_update_time"])
-                    intervals_missed = 0
-                    next_penalty_time = last_update_dt + timedelta(hours=2)
-                    while current_dt >= next_penalty_time:
-                        intervals_missed += 1
-                        next_penalty_time += timedelta(hours=2)
-                    if intervals_missed > 0:
-                        print(f"Applying {intervals_missed} penalty for ProdID {prod_id} due to missed update(s).")
-                        data["actual_day"] = max(-999999, data["actual_day"] - intervals_missed)
-                        data["gap_day"] = data["plan_day"] - data["actual_day"]
-                        data["last_actual_update_time"] = current_dt.isoformat()
-                        flash(f"Warning: Automatic -{intervals_missed} penalty applied for ProdID {prod_id} due to missed update(s).", 'warning')
-                        save_state()
-                        publish_all_data_to_esp()
-        except ValueError:
-            pass
 
 @app.after_request
 def after_request_save_state(response):
@@ -262,14 +239,10 @@ def shift_action(prod_id):
         if not data["is_shift_active"]:
             flash("Shift is not active. Please start shift first.", 'error')
             return redirect(url_for('production_page', prod_id=prod_id))
-
-        # --- MODIFIED LOGIC: Increment actual_day by 1 ---
-        data["actual_day"] += 1 
-        # --- END MODIFIED LOGIC ---
-
+        data["actual_day"] += 1
         data["gap_day"] = data["plan_day"] - data["actual_day"]
         data["last_actual_update_time"] = current_dt.isoformat()
-        flash(f"Actual for ProdID {prod_id} incremented to {data['actual_day']}.", 'success') # Update flash message
+        flash(f"Actual for ProdID {prod_id} incremented to {data['actual_day']}.", 'success')
         print("update_actual over")
     elif action == 'end_shift':
         if not data["is_shift_active"]:
@@ -347,16 +320,12 @@ def update_server_time():
         if not client_time_str:
             flash("No time provided.", 'error')
             return redirect(url_for('home'))
-        
-        # Validate format (YYYY-MM-DD HH:MM:SS)
         try:
             datetime.strptime(client_time_str, "%Y-%m-%d %H:%M:%S")
         except ValueError:
             flash("Invalid time format provided. Expected YYYY-MM-DD HH:MM:SS.", 'error')
             print(f"Invalid time format: {client_time_str}")
             return redirect(url_for('home'))
-        
-        # Disable automatic time synchronization
         try:
             subprocess.run(['sudo', 'timedatectl', 'set-ntp', 'false'], check=True)
             print("Automatic time synchronization disabled.")
@@ -364,8 +333,6 @@ def update_server_time():
             flash(f"Failed to disable automatic time synchronization: {e}", 'error')
             print(f"Error disabling NTP: {e}")
             return redirect(url_for('home'))
-        
-        # Set system time
         try:
             subprocess.run(['sudo', 'timedatectl', 'set-time', client_time_str], check=True)
             flash(f"Server time updated to {client_time_str}.", 'success')
@@ -374,7 +341,6 @@ def update_server_time():
             flash(f"Failed to update server time: {e}", 'error')
             print(f"Error setting system time: {e}")
             return redirect(url_for('home'))
-        
         return redirect(url_for('home'))
     except Exception as e:
         flash(f"Error updating server time: {e}", 'error')
