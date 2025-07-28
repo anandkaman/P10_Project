@@ -15,14 +15,14 @@
     "2": {
         "prod_id": 2,
         "plan_day": 6,
-        "actual_day": -6,
-        "gap_day": 12,
+        "actual_day": -4,
+        "gap_day": 10,
         "plan_month": 20,
         "actual_month": 3,
         "gap_month": 17,
         "is_shift_active": true,
         "shift_start_time": "2025-07-27T00:00:42.826793",
-        "last_actual_update_time": "2025-07-27T13:43:27.196091",
+        "last_actual_update_time": "2025-07-28T11:28:35.700224",
         "current_month_tracker": "2025-07"
     },
     "3": {
